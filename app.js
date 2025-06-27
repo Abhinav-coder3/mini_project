@@ -19,14 +19,17 @@ app.get('/login', function (req, res) {
     res.render("login");
 });
 
-app.get('/profile',isloggedIn, function (req, res) {
-      console.log(req.user);
-      res.render("login");
+app.get('/profile',isloggedIn, async function (req, res) {
+      let user = await userModel.findOne({email:req.user.email});
+      res.render("profile",{user});
+      console.log(user)
 });
 
 app.get('/register', function (req, res) {
     res.render("index");
 });
+
+
 
 // ✅ Register Route
 app.post('/register', async (req, res) => {
