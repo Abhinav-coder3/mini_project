@@ -25,6 +25,15 @@ app.get('/profile',isloggedIn, async function (req, res) {
       console.log(user)
 });
 
+app.get('/post',isloggedIn, async function (req, res) {
+      let user = await userModel.findOne({email:req.user.email});
+     let {content}=req.body;
+     let post = await postModel.create({
+        user:user._id,
+        content:content
+     })
+});
+
 app.get('/register', function (req, res) {
     res.render("index");
 });
