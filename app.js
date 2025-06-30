@@ -17,21 +17,26 @@ app.get('/', function (req, res) {
 
 app.get('/login', function (req, res) {
     res.render("login");
+
 });
 
 app.get('/profile',isloggedIn, async function (req, res) {
       let user = await userModel.findOne({email:req.user.email});
+      user.populate("posts");
       res.render("profile",{user});
-      console.log(user)
+      
 });
 
-app.get('/post',isloggedIn, async function (req, res) {
+app.post('/post',isloggedIn, async function (req, res) {
       let user = await userModel.findOne({email:req.user.email});
      let {content}=req.body;
      let post = await postModel.create({
         user:user._id,
         content:content
      })
+     user.posts.push(post._id);
+     await user.save();
+     res.redirect("/profile");
 });
 
 app.get('/register', function (req, res) {
