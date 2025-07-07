@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const post = require('./models/post');
+const multerconfig = require('./config/multerconfig')
 
 app.set("view engine", "ejs");
 app.use(express.json());
