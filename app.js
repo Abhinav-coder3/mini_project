@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const post = require('./models/post');
 const path = require("path");
-const multerconfig = require("./config/multerconfig");
+const upload = require("./config/multerconfig");
 const crypto = require('crypto');
 app.set("view engine", "ejs");
 app.use(express.json());
@@ -21,6 +21,19 @@ app.get('/', function (req, res) {
 
 app.get('/login', function (req, res) {
     res.render("login");
+
+});
+
+app.get('/profile/upload', function (req, res) {
+    res.render("profileupload");
+
+});
+
+app.post('/upload', isloggedIn,upload.single("image") ,async function (req, res) {
+    let user = await userModel.findOne({email:req.user.email});
+    user.profilepic = req.file.filename;
+    await user.save();
+    res.redirect("/profile");
 
 });
 
